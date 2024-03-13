@@ -1,0 +1,111 @@
+openapi: 3.0.1
+info:
+  title: Employee API
+  version: 1.0.0
+servers:
+  - url: http://localhost:9111
+paths:
+  /employees:
+    get:
+      summary: Get all employees
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              example:
+                - employeeId: 1
+                  employeeName: John Doe
+                  employeeAge: 30
+                  employeeSalary: 50000
+                - employeeId: 2
+                  employeeName: Jane Doe
+                  employeeAge: 25
+                  employeeSalary: 60000
+    post:
+      summary: Add a new employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeDTO'
+      responses:
+        '201':
+          description: Employee created successfully
+          content:
+            application/json:
+              example:
+                employeeId: 3
+                employeeName: Sam Smith
+                employeeAge: 28
+                employeeSalary: 55000
+  /employees/{employeeId}:
+    parameters:
+      - name: employeeId
+        in: path
+        required: true
+        description: ID of the employee
+        schema:
+          type: integer
+    get:
+      summary: Get employee by ID
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              example:
+                employeeId: 1
+                employeeName: John Doe
+                employeeAge: 30
+                employeeSalary: 50000
+        '404':
+          description: Employee not found
+    put:
+      summary: Update an existing employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeDTO'
+      responses:
+        '200':
+          description: Employee updated successfully
+          content:
+            application/json:
+              example:
+                employeeId: 1
+                employeeName: Updated Name
+                employeeAge: 31
+                employeeSalary: 51000
+        '404':
+          description: Employee not found
+    delete:
+      summary: Delete an employee
+      responses:
+        '204':
+          description: Employee deleted successfully
+        '404':
+          description: Employee not found
+components:
+  schemas:
+    EmployeeDTO:
+      type: object
+      properties:
+        employeeId:
+          type: integer
+          format: int64
+        employeeName:
+          type: string
+        employeeAge:
+          type: integer
+          format: int32
+        employeeSalary:
+          type: number
+          format: double
+      required:
+        - employeeName
+        - employeeAge
+        - employeeSalary
